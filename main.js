@@ -38,28 +38,27 @@ app.on('activate', () => {
   }
 });
 
-// Get the user data directory for saving configuration
-function getUserConfigPath() {
-  const userDataPath = app.getPath('userData');
-  return path.join(userDataPath, 'welding_config.json');
-}
-
-// Get the default config path (from app resources)
+// Get the config path from the executable's directory
 function getDefaultConfigPath() {
-  return path.join(__dirname, 'welding_config.json');
+  // In production, use the executable's directory
+  // In development, use the current directory
+  if (app.isPackaged) {
+    // Get the directory where the exe is located
+    const exePath = process.execPath;
+    const exeDir = path.dirname(exePath);
+    return path.join(exeDir, 'welding_config.json');
+  } else {
+    // Development mode - use current directory
+    return path.join(__dirname, 'welding_config.json');
+  }
 }
 
 // IPC handlers for file operations
+// Config file is loaded from and saved to the same directory as the executable
+// This makes the app portable - users can run it from any folder with their config
 ipcMain.handle('load-config', async () => {
   try {
-    // First try to load from user data directory
-    const userConfigPath = getUserConfigPath();
-    if (fs.existsSync(userConfigPath)) {
-      const data = fs.readFileSync(userConfigPath, 'utf8');
-      return JSON.parse(data);
-    }
-    
-    // If user config doesn't exist, load from default config
+    // Always load from default config path
     const defaultConfigPath = getDefaultConfigPath();
     const data = fs.readFileSync(defaultConfigPath, 'utf8');
     return JSON.parse(data);
@@ -71,16 +70,10 @@ ipcMain.handle('load-config', async () => {
 
 ipcMain.handle('save-config', async (event, config) => {
   try {
-    // Save to user data directory
-    const userConfigPath = getUserConfigPath();
+    // Always save to default config path
+    const defaultConfigPath = getDefaultConfigPath();
     
-    // Ensure the directory exists
-    const userDataDir = path.dirname(userConfigPath);
-    if (!fs.existsSync(userDataDir)) {
-      fs.mkdirSync(userDataDir, { recursive: true });
-    }
-    
-    fs.writeFileSync(userConfigPath, JSON.stringify(config, null, 4), 'utf8');
+    fs.writeFileSync(defaultConfigPath, JSON.stringify(config, null, 4), 'utf8');
     return { success: true };
   } catch (error) {
     console.error('Error saving config:', error);

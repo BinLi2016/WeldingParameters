@@ -47,74 +47,126 @@ class WeldingParameterManager {
                 this.populateForm();
                 this.showStatus('配置加载成功', 'success');
             } else {
-                this.showStatus('配置加载失败', 'danger');
+                this.showStatus('配置加载失败，使用默认值', 'warning');
+                this.populateForm(); // Still populate form with defaults
             }
         } catch (error) {
             console.error('Error loading configuration:', error);
-            this.showStatus('加载配置时出错: ' + error.message, 'danger');
+            this.showStatus('加载配置时出错，使用默认值: ' + error.message, 'warning');
+            this.populateForm(); // Still populate form with defaults
         }
     }
 
     populateForm() {
-        if (!this.config) return;
+        if (this.config) {
+            // Use config values if available
+            // Basic Arc Parameters
+            document.getElementById('arcNum').value = this.config.arcNum?.value || '';
+            document.getElementById('arcTimeout').value = this.config.arcTimeout?.value || '';
 
-        // Basic Arc Parameters
-        document.getElementById('arcNum').value = this.config.arcNum?.value || '';
-        document.getElementById('arcTimeout').value = this.config.arcTimeout?.value || '';
+            // Welding Parameters
+            document.getElementById('weldVel').value = this.config.weldVel?.value || '';
+            document.getElementById('weldCurr').value = this.config.weldCurr?.value || '';
+            document.getElementById('weldVolt').value = this.config.weldVolt?.value || '';
 
-        // Welding Parameters
-        document.getElementById('weldVel').value = this.config.weldVel?.value || '';
-        document.getElementById('weldCurr').value = this.config.weldCurr?.value || '';
-        document.getElementById('weldVolt').value = this.config.weldVolt?.value || '';
+            // Weaving Parameters
+            document.getElementById('weaveNum').value = this.config.weaveNum?.value || '';
+            document.getElementById('weaveType').value = this.config.weaveType?.value || '0';
+            document.getElementById('weaveFreq').value = this.config.weaveFreq?.value || '';
+            document.getElementById('weaveRange').value = this.config.weaveRange?.value || '';
+            document.getElementById('weaveLeftStayTime').value = this.config.weaveLeftStayTime?.value || '';
+            document.getElementById('weaveRightStayTime').value = this.config.weaveRightStayTime?.value || '';
+            document.getElementById('weaveCircleRadio').value = this.config.weaveCircleRadio?.value ?? '';
 
-        // Weaving Parameters
-        document.getElementById('weaveNum').value = this.config.weaveNum?.value || '';
-        document.getElementById('weaveType').value = this.config.weaveType?.value || '0';
-        document.getElementById('weaveFreq').value = this.config.weaveFreq?.value || '';
-        document.getElementById('weaveRange').value = this.config.weaveRange?.value || '';
-        document.getElementById('weaveLeftStayTime').value = this.config.weaveLeftStayTime?.value || '';
-        document.getElementById('weaveRightStayTime').value = this.config.weaveRightStayTime?.value || '';
-        document.getElementById('weaveCircleRadio').value = this.config.weaveCircleRadio?.value ?? '';
+            // Weave Mode Parameters
+            document.getElementById('weaveIncStayTime').value = this.config.weaveIncStayTime?.value ?? '0';
+            document.getElementById('weaveStationary').value = this.config.weaveStationary?.value ?? '0';
+        } else {
+            // Use default values if no config available
+            // Basic Arc Parameters
+            document.getElementById('arcNum').value = 1;
+            document.getElementById('arcTimeout').value = 5000;
 
-        // Weave Mode Parameters
-        document.getElementById('weaveIncStayTime').value = this.config.weaveIncStayTime?.value ?? '0';
-        document.getElementById('weaveStationary').value = this.config.weaveStationary?.value ?? '0';
+            // Welding Parameters
+            document.getElementById('weldVel').value = 3;
+            document.getElementById('weldCurr').value = 150;
+            document.getElementById('weldVolt').value = 20;
+
+            // Weaving Parameters
+            document.getElementById('weaveNum').value = 1;
+            document.getElementById('weaveType').value = 0;
+            document.getElementById('weaveFreq').value = 2.0;
+            document.getElementById('weaveRange').value = 2.0;
+            document.getElementById('weaveLeftStayTime').value = 5.0;
+            document.getElementById('weaveRightStayTime').value = 5.0;
+            document.getElementById('weaveCircleRadio').value = 0;
+
+            // Weave Mode Parameters
+            document.getElementById('weaveIncStayTime').value = 0;
+            document.getElementById('weaveStationary').value = 0;
+            
+            this.showStatus('使用默认值填充表单', 'info');
+        }
 
         // Update current value displays
         this.updateCurrentValues();
     }
 
     updateCurrentValues() {
-        if (!this.config) return;
+        if (this.config) {
+            // Use config values if available
+            // Basic Arc Parameters
+            document.getElementById('arcNumValue').textContent = this.config.arcNum?.value || '-';
+            document.getElementById('arcTimeoutValue').textContent = this.config.arcTimeout?.value || '-';
 
-        // Basic Arc Parameters
-        document.getElementById('arcNumValue').textContent = this.config.arcNum?.value || '-';
-        document.getElementById('arcTimeoutValue').textContent = this.config.arcTimeout?.value || '-';
+            // Welding Parameters
+            document.getElementById('weldVelValue').textContent = this.config.weldVel?.value || '-';
+            document.getElementById('weldCurrValue').textContent = this.config.weldCurr?.value || '-';
+            document.getElementById('weldVoltValue').textContent = this.config.weldVolt?.value || '-';
 
-        // Welding Parameters
-        document.getElementById('weldVelValue').textContent = this.config.weldVel?.value || '-';
-        document.getElementById('weldCurrValue').textContent = this.config.weldCurr?.value || '-';
-        document.getElementById('weldVoltValue').textContent = this.config.weldVolt?.value || '-';
+            // Weaving Parameters
+            document.getElementById('weaveNumValue').textContent = this.config.weaveNum?.value || '-';
+            document.getElementById('weaveTypeValue').textContent = this.config.weaveType?.value || '-';
+            document.getElementById('weaveFreqValue').textContent = this.config.weaveFreq?.value || '-';
+            document.getElementById('weaveRangeValue').textContent = this.config.weaveRange?.value || '-';
+            document.getElementById('weaveLeftStayTimeValue').textContent = this.config.weaveLeftStayTime?.value || '-';
+            document.getElementById('weaveRightStayTimeValue').textContent = this.config.weaveRightStayTime?.value || '-';
+            document.getElementById('weaveCircleRadioValue').textContent = this.config.weaveCircleRadio?.value ?? '-';
 
-        // Weaving Parameters
-        document.getElementById('weaveNumValue').textContent = this.config.weaveNum?.value || '-';
-        document.getElementById('weaveTypeValue').textContent = this.config.weaveType?.value || '-';
-        document.getElementById('weaveFreqValue').textContent = this.config.weaveFreq?.value || '-';
-        document.getElementById('weaveRangeValue').textContent = this.config.weaveRange?.value || '-';
-        document.getElementById('weaveLeftStayTimeValue').textContent = this.config.weaveLeftStayTime?.value || '-';
-        document.getElementById('weaveRightStayTimeValue').textContent = this.config.weaveRightStayTime?.value || '-';
-        document.getElementById('weaveCircleRadioValue').textContent = this.config.weaveCircleRadio?.value ?? '-';
+            // Weave Mode Parameters
+            document.getElementById('weaveIncStayTimeValue').textContent = this.config.weaveIncStayTime?.value ?? '-';
+            document.getElementById('weaveStationaryValue').textContent = this.config.weaveStationary?.value ?? '-';
+        } else {
+            // Use form values if no config available
+            // Basic Arc Parameters
+            document.getElementById('arcNumValue').textContent = document.getElementById('arcNum').value || '-';
+            document.getElementById('arcTimeoutValue').textContent = document.getElementById('arcTimeout').value || '-';
 
-        // Weave Mode Parameters
-        document.getElementById('weaveIncStayTimeValue').textContent = this.config.weaveIncStayTime?.value ?? '-';
-        document.getElementById('weaveStationaryValue').textContent = this.config.weaveStationary?.value ?? '-';
+            // Welding Parameters
+            document.getElementById('weldVelValue').textContent = document.getElementById('weldVel').value || '-';
+            document.getElementById('weldCurrValue').textContent = document.getElementById('weldCurr').value || '-';
+            document.getElementById('weldVoltValue').textContent = document.getElementById('weldVolt').value || '-';
+
+            // Weaving Parameters
+            document.getElementById('weaveNumValue').textContent = document.getElementById('weaveNum').value || '-';
+            document.getElementById('weaveTypeValue').textContent = document.getElementById('weaveType').value || '-';
+            document.getElementById('weaveFreqValue').textContent = document.getElementById('weaveFreq').value || '-';
+            document.getElementById('weaveRangeValue').textContent = document.getElementById('weaveRange').value || '-';
+            document.getElementById('weaveLeftStayTimeValue').textContent = document.getElementById('weaveLeftStayTime').value || '-';
+            document.getElementById('weaveRightStayTimeValue').textContent = document.getElementById('weaveRightStayTime').value || '-';
+            document.getElementById('weaveCircleRadioValue').textContent = document.getElementById('weaveCircleRadio').value || '-';
+
+            // Weave Mode Parameters
+            document.getElementById('weaveIncStayTimeValue').textContent = document.getElementById('weaveIncStayTime').value || '-';
+            document.getElementById('weaveStationaryValue').textContent = document.getElementById('weaveStationary').value || '-';
+        }
     }
 
     async saveConfiguration() {
         try {
             this.showStatus('正在保存配置...', 'info');
             
-            // Collect form data
+            // Collect form data with fallback to default values if config is missing
             const formData = {
                 arcNum: {
                     value: parseInt(document.getElementById('arcNum').value),
@@ -293,36 +345,65 @@ class WeldingParameterManager {
     }
 
     resetToDefaults() {
-        if (!this.config) return;
-        
         if (confirm('确定要将所有参数重置为默认值吗？')) {
-            // Basic Arc Parameters
-            document.getElementById('arcNum').value = this.config.arcNum?.default || 1;
-            document.getElementById('arcTimeout').value = this.config.arcTimeout?.default || 5000;
+            if (this.config) {
+                // Use config defaults if available
+                // Basic Arc Parameters
+                document.getElementById('arcNum').value = this.config.arcNum?.default || 1;
+                document.getElementById('arcTimeout').value = this.config.arcTimeout?.default || 5000;
 
-            // Welding Parameters
-            document.getElementById('weldVel').value = this.config.weldVel?.default || 3;
-            document.getElementById('weldCurr').value = this.config.weldCurr?.default || 150;
-            document.getElementById('weldVolt').value = this.config.weldVolt?.default || 20;
+                // Welding Parameters
+                document.getElementById('weldVel').value = this.config.weldVel?.default || 3;
+                document.getElementById('weldCurr').value = this.config.weldCurr?.default || 150;
+                document.getElementById('weldVolt').value = this.config.weldVolt?.default || 20;
 
-            // Weaving Parameters
-            document.getElementById('weaveNum').value = this.config.weaveNum?.default || 1;
-            document.getElementById('weaveType').value = this.config.weaveType?.default || 0;
-            document.getElementById('weaveFreq').value = this.config.weaveFreq?.default || 2.0;
-            document.getElementById('weaveRange').value = this.config.weaveRange?.default || 2.0;
-            document.getElementById('weaveLeftStayTime').value = this.config.weaveLeftStayTime?.default || 5.0;
-            document.getElementById('weaveRightStayTime').value = this.config.weaveRightStayTime?.default || 5.0;
-            document.getElementById('weaveCircleRadio').value = this.config.weaveCircleRadio?.default || 0;
+                // Weaving Parameters
+                document.getElementById('weaveNum').value = this.config.weaveNum?.default || 1;
+                document.getElementById('weaveType').value = this.config.weaveType?.default || 0;
+                document.getElementById('weaveFreq').value = this.config.weaveFreq?.default || 2.0;
+                document.getElementById('weaveRange').value = this.config.weaveRange?.default || 2.0;
+                document.getElementById('weaveLeftStayTime').value = this.config.weaveLeftStayTime?.default || 5.0;
+                document.getElementById('weaveRightStayTime').value = this.config.weaveRightStayTime?.default || 5.0;
+                document.getElementById('weaveCircleRadio').value = this.config.weaveCircleRadio?.default || 0;
 
-            // Weave Mode Parameters
-            document.getElementById('weaveIncStayTime').value = this.config.weaveIncStayTime?.default || 0;
-            document.getElementById('weaveStationary').value = this.config.weaveStationary?.default || 0;
+                // Weave Mode Parameters
+                document.getElementById('weaveIncStayTime').value = this.config.weaveIncStayTime?.default || 0;
+                document.getElementById('weaveStationary').value = this.config.weaveStationary?.default || 0;
+                
+                this.showStatus('参数已重置为配置默认值', 'success');
+            } else {
+                // Use hardcoded defaults if no config available
+                // Basic Arc Parameters
+                document.getElementById('arcNum').value = 1;
+                document.getElementById('arcTimeout').value = 5000;
+
+                // Welding Parameters
+                document.getElementById('weldVel').value = 3;
+                document.getElementById('weldCurr').value = 150;
+                document.getElementById('weldVolt').value = 20;
+
+                // Weaving Parameters
+                document.getElementById('weaveNum').value = 1;
+                document.getElementById('weaveType').value = 0;
+                document.getElementById('weaveFreq').value = 2.0;
+                document.getElementById('weaveRange').value = 2.0;
+                document.getElementById('weaveLeftStayTime').value = 5.0;
+                document.getElementById('weaveRightStayTime').value = 5.0;
+                document.getElementById('weaveCircleRadio').value = 0;
+
+                // Weave Mode Parameters
+                document.getElementById('weaveIncStayTime').value = 0;
+                document.getElementById('weaveStationary').value = 0;
+                
+                this.showStatus('参数已重置为系统默认值', 'success');
+            }
             
             // Validate the new values
             const inputs = document.querySelectorAll('input[type="number"], select');
             inputs.forEach(input => this.validateInput(input));
             
-            this.showStatus('参数已重置为默认值', 'info');
+            // Update current value displays
+            this.updateCurrentValues();
         }
     }
 
