@@ -1,0 +1,142 @@
+{
+    "arcNum": {
+        "value": 2,
+        "description": "焊机配置文件编号",
+        "range": [
+            0,
+            99
+        ],
+        "default": 1,
+        "unit": "编号"
+    },
+    "arcTimeout": {
+        "value": 5000,
+        "description": "起弧超时时间",
+        "range": [
+            0,
+            60000
+        ],
+        "default": 5000,
+        "unit": "ms"
+    },
+    "weldVel": {
+        "value": 4,
+        "description": "焊接速度",
+        "range": [
+            1,
+            100
+        ],
+        "default": 3,
+        "unit": "%"
+    },
+    "weldCurr": {
+        "value": 150,
+        "description": "焊接电流",
+        "range": [
+            50,
+            500
+        ],
+        "default": 150,
+        "unit": "A"
+    },
+    "weldVolt": {
+        "value": 20,
+        "description": "焊接电压",
+        "range": [
+            10,
+            50
+        ],
+        "default": 20,
+        "unit": "V"
+    },
+    "weaveNum": {
+        "value": 1,
+        "description": "摆动参数配置编号",
+        "range": [
+            0,
+            99
+        ],
+        "default": 1,
+        "unit": "编号"
+    },
+    "weaveType": {
+        "value": 1,
+        "description": "摆动类型 0-平面三角波摆动；1-垂直L型三角波摆动；2-顺时针圆形摆动；3-逆时针圆形摆动；4-平面正弦波摆动；5-垂直L型正弦波摆动；6-垂直三角波摆动；7-垂直正弦波摆动",
+        "range": [
+            0,
+            7
+        ],
+        "default": 0,
+        "unit": "类型"
+    },
+    "weaveFreq": {
+        "value": 2,
+        "description": "摆动频率",
+        "range": [
+            0.1,
+            10
+        ],
+        "default": 2,
+        "unit": "Hz"
+    },
+    "weaveRange": {
+        "value": 2,
+        "description": "摆动幅度，设置为0时表明不使用摆动",
+        "range": [
+            0,
+            20
+        ],
+        "default": 2,
+        "unit": "mm"
+    },
+    "weaveLeftStayTime": {
+        "value": 5,
+        "description": "摆动左停留时间",
+        "range": [
+            0,
+            1000
+        ],
+        "default": 5,
+        "unit": "ms"
+    },
+    "weaveRightStayTime": {
+        "value": 5,
+        "description": "摆动右停留时间",
+        "range": [
+            0,
+            1000
+        ],
+        "default": 5,
+        "unit": "ms"
+    },
+    "weaveCircleRadio": {
+        "value": 17,
+        "description": "圆形摆动-回调比率",
+        "range": [
+            0,
+            100
+        ],
+        "default": 0,
+        "unit": "%"
+    },
+    "weaveIncStayTime": {
+        "value": 0,
+        "description": "等待模式，0-周期不包含等待时间；1-周期包含等待时间（必选参数）",
+        "range": [
+            0,
+            1
+        ],
+        "default": 0,
+        "unit": "模式"
+    },
+    "weaveStationary": {
+        "value": 0,
+        "description": "摆动位置等待，0-等待时间内位置继续移动；1-等待时间内位置静止",
+        "range": [
+            0,
+            1
+        ],
+        "default": 0,
+        "unit": "模式"
+    }
+}

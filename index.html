@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>焊接参数管理器</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="row bg-primary text-white py-3">
+            <div class="col">
+                <h1 class="mb-0">
+                    <i class="bi bi-gear-fill me-2"></i>
+                    焊接参数管理器
+                </h1>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <!-- Parameter Form -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-sliders me-2"></i>
+                            焊接参数
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="parameterForm">
+                            <!-- Basic Arc Parameters -->
+                            <h6 class="text-primary mb-3">基础电弧参数</h6>
+                            
+                            <!-- Arc Number -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="arcNum" class="form-label">电弧编号</label>
+                                    <input type="number" class="form-control" id="arcNum" min="0" max="99">
+                                    <div class="form-text">焊机配置文件编号</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="arcNumValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Arc Timeout -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="arcTimeout" class="form-label">电弧超时</label>
+                                    <input type="number" class="form-control" id="arcTimeout" min="0" max="60000">
+                                    <div class="form-text">起弧超时时间 (ms)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="arcTimeoutValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Welding Parameters -->
+                            <h6 class="text-primary mb-3 mt-4">焊接参数</h6>
+                            
+                            <!-- Weld Velocity -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weldVel" class="form-label">焊接速度</label>
+                                    <input type="number" class="form-control" id="weldVel" min="1" max="100">
+                                    <div class="form-text">焊接速度 (%)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weldVelValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Weld Current -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weldCurr" class="form-label">焊接电流</label>
+                                    <input type="number" class="form-control" id="weldCurr" min="50" max="500" step="0.1">
+                                    <div class="form-text">焊接电流 (A)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weldCurrValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Weld Voltage -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weldVolt" class="form-label">焊接电压</label>
+                                    <input type="number" class="form-control" id="weldVolt" min="10" max="50" step="0.1">
+                                    <div class="form-text">焊接电压 (V)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weldVoltValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Weaving Parameters -->
+                            <h6 class="text-primary mb-3 mt-4">摆动参数</h6>
+                            
+                            <!-- Weave Number -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weaveNum" class="form-label">摆动编号</label>
+                                    <input type="number" class="form-control" id="weaveNum" min="0" max="99">
+                                    <div class="form-text">摆动参数配置编号</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weaveNumValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Weave Type -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weaveType" class="form-label">摆动类型</label>
+                                    <select class="form-select" id="weaveType">
+                                        <option value="0">0-平面三角波摆动</option>
+                                        <option value="1">1-垂直L型三角波摆动</option>
+                                        <option value="2">2-顺时针圆形摆动</option>
+                                        <option value="3">3-逆时针圆形摆动</option>
+                                        <option value="4">4-平面正弦波摆动</option>
+                                        <option value="5">5-垂直L型正弦波摆动</option>
+                                        <option value="6">6-垂直三角波摆动</option>
+                                        <option value="7">7-垂直正弦波摆动</option>
+                                    </select>
+                                    <div class="form-text">摆动类型选择</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weaveTypeValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Weave Frequency -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weaveFreq" class="form-label">摆动频率</label>
+                                    <input type="number" class="form-control" id="weaveFreq" min="0.1" max="10.0" step="0.1">
+                                    <div class="form-text">摆动频率 (Hz)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weaveFreqValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Weave Range -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weaveRange" class="form-label">摆动幅度</label>
+                                    <input type="number" class="form-control" id="weaveRange" min="0" max="20" step="0.1">
+                                    <div class="form-text">摆动幅度，设置为0时表明不使用摆动 (mm)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weaveRangeValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Weave Left Stay Time -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weaveLeftStayTime" class="form-label">摆动左停留时间</label>
+                                    <input type="number" class="form-control" id="weaveLeftStayTime" min="0" max="1000" step="0.1">
+                                    <div class="form-text">摆动左停留时间 (ms)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weaveLeftStayTimeValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Weave Right Stay Time -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weaveRightStayTime" class="form-label">摆动右停留时间</label>
+                                    <input type="number" class="form-control" id="weaveRightStayTime" min="0" max="1000" step="0.1">
+                                    <div class="form-text">摆动右停留时间 (ms)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weaveRightStayTimeValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Weave Circle Radio -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weaveCircleRadio" class="form-label">圆形摆动回调比率</label>
+                                    <input type="number" class="form-control" id="weaveCircleRadio" min="0" max="100">
+                                    <div class="form-text">圆形摆动-回调比率 (%)</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weaveCircleRadioValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Weave Mode Parameters -->
+                            <h6 class="text-primary mb-3 mt-4">摆动模式参数</h6>
+                            
+                            <!-- Weave Include Stay Time -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weaveIncStayTime" class="form-label">等待模式</label>
+                                    <select class="form-select" id="weaveIncStayTime">
+                                        <option value="0">0-周期不包含等待时间</option>
+                                        <option value="1">1-周期包含等待时间</option>
+                                    </select>
+                                    <div class="form-text">等待模式（必选参数）</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weaveIncStayTimeValue">-</div>
+                                </div>
+                            </div>
+
+                            <!-- Weave Stationary -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="weaveStationary" class="form-label">摆动位置等待</label>
+                                    <select class="form-select" id="weaveStationary">
+                                        <option value="0">0-等待时间内位置继续移动</option>
+                                        <option value="1">1-等待时间内位置静止</option>
+                                    </select>
+                                    <div class="form-text">摆动位置等待模式</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">当前值</label>
+                                    <div class="form-control-plaintext" id="weaveStationaryValue">-</div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-md-4">
+                <!-- Quick Actions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="bi bi-lightning me-2"></i>
+                            快速操作
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <button type="submit" form="parameterForm" class="btn btn-primary w-100 mb-2">
+                            <i class="bi bi-save me-1"></i>
+                            保存更改
+                        </button>
+                        <button type="button" class="btn btn-secondary w-100 mb-2" id="resetBtn">
+                            <i class="bi bi-arrow-clockwise me-1"></i>
+                            重置为默认值
+                        </button>
+                        <button type="button" class="btn btn-outline-info w-100 mb-2" id="refreshBtn">
+                            <i class="bi bi-arrow-repeat me-1"></i>
+                            从文件刷新
+                        </button>
+                        <button class="btn btn-outline-success w-100 mb-2" id="exportBtn">
+                            <i class="bi bi-download me-1"></i>
+                            导出配置
+                        </button>
+                        <button class="btn btn-outline-warning w-100 mb-2" id="backupBtn">
+                            <i class="bi bi-cloud-upload me-1"></i>
+                            创建备份
+                        </button>
+                        <button class="btn btn-outline-danger w-100 mb-3" id="validateBtn">
+                            <i class="bi bi-check-circle me-1"></i>
+                            验证参数
+                        </button>
+                        
+                        <!-- Status Area -->
+                        <hr>
+                        <div class="mt-3">
+                            <h6 class="text-muted mb-2">
+                                <i class="bi bi-info-circle me-1"></i>
+                                状态
+                            </h6>
+                            <div id="statusMessage" class="alert alert-info mb-2">
+                                准备加载配置
+                            </div>
+                            <small class="text-muted">最后更新: <span id="lastUpdated">-</span></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="renderer.js"></script>
+</body>
+</html> 

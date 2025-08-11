@@ -1,0 +1,86 @@
+{
+  "name": "welding-parameter-manager",
+  "version": "1.0.0",
+  "description": "Electron app for managing welding parameters",
+  "main": "main.js",
+  "scripts": {
+    "start": "npx electron .",
+    "dev": "npx electron . --dev",
+    "test": "npx electron . --test",
+    "build": "npx electron-builder",
+    "build:win": "npx electron-builder --win",
+    "build:mac": "npx electron-builder --mac",
+    "build:linux": "npx electron-builder --linux",
+    "dist": "npx electron-builder --publish=never",
+    "pack": "npx electron-builder --dir",
+    "pack:win": "npx electron-builder --dir --win",
+    "pack:mac": "npx electron-builder --dir --mac",
+    "pack:linux": "npx electron-builder --dir --linux"
+  },
+  "keywords": [
+    "electron",
+    "welding",
+    "parameters",
+    "chinese"
+  ],
+  "author": "Goft-NBEC",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^37.2.6",
+    "electron-builder": "^24.6.4"
+  },
+  "config": {
+    "electronDownload": {
+      "mirror": "https://npmmirror.com/mirrors/electron/"
+    }
+  },
+  "build": {
+    "appId": "com.welding.parameter-manager",
+    "productName": "焊接参数管理器",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "renderer.js",
+      "index.html",
+      "styles.css",
+      "welding_config.json",
+      "welding-machine.png",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "welding-machine.png",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "焊接参数管理器"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "welding-machine.png"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "welding-machine.png"
+    }
+  }
+}
