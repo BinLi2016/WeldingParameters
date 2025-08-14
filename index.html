@@ -12,15 +12,15 @@
     <div class="container-fluid">
         <!-- Header -->
         <div class="row bg-primary text-white py-3">
-            <div class="col">
-                <h1 class="mb-0">
+            <div class="col d-flex flex-column justify-content-between">
+                <h2 class="mb-0" style="font-size: 1.5rem;">
                     <i class="bi bi-gear-fill me-2"></i>
                     焊接参数管理器
-                </h1>
-                <h4 class="mb-0 mt-2 text-light">
+                </h2>
+                <h6 class="mb-0 mt-2 text-light text-end align-self-end" style="font-size: 0.9rem;">
                     <i class="bi bi-mic-fill me-2"></i>
                     华北康港语音控制焊接系统
-                </h4>
+                </h6>
             </div>
         </div>
 
@@ -43,9 +43,9 @@
                             <!-- Arc Number -->
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label for="arcNum" class="form-label">电弧编号</label>
+                                    <label for="arcNum" class="form-label">焊接配置</label>
                                     <input type="number" class="form-control" id="arcNum" min="0" max="99">
-                                    <div class="form-text">焊机配置文件编号</div>
+                                    <div class="form-text">焊接配置文件编号</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">当前值</label>

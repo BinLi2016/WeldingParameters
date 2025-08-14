@@ -116,49 +116,49 @@ class WeldingParameterManager {
         if (this.config) {
             // Use config values if available
             // Basic Arc Parameters
-            document.getElementById('arcNumValue').textContent = this.config.arcNum?.value || '-';
-            document.getElementById('arcTimeoutValue').textContent = this.config.arcTimeout?.value || '-';
+            document.getElementById('arcNumValue').textContent = this.config.arcNum?.value !== undefined ? this.config.arcNum.value : '-';
+            document.getElementById('arcTimeoutValue').textContent = this.config.arcTimeout?.value !== undefined ? this.config.arcTimeout.value : '-';
 
             // Welding Parameters
-            document.getElementById('weldVelValue').textContent = this.config.weldVel?.value || '-';
-            document.getElementById('weldCurrValue').textContent = this.config.weldCurr?.value || '-';
-            document.getElementById('weldVoltValue').textContent = this.config.weldVolt?.value || '-';
+            document.getElementById('weldVelValue').textContent = this.config.weldVel?.value !== undefined ? this.config.weldVel.value : '-';
+            document.getElementById('weldCurrValue').textContent = this.config.weldCurr?.value !== undefined ? this.config.weldCurr.value : '-';
+            document.getElementById('weldVoltValue').textContent = this.config.weldVolt?.value !== undefined ? this.config.weldVolt.value : '-';
 
             // Weaving Parameters
-            document.getElementById('weaveNumValue').textContent = this.config.weaveNum?.value || '-';
-            document.getElementById('weaveTypeValue').textContent = this.config.weaveType?.value || '-';
-            document.getElementById('weaveFreqValue').textContent = this.config.weaveFreq?.value || '-';
-            document.getElementById('weaveRangeValue').textContent = this.config.weaveRange?.value || '-';
-            document.getElementById('weaveLeftStayTimeValue').textContent = this.config.weaveLeftStayTime?.value || '-';
-            document.getElementById('weaveRightStayTimeValue').textContent = this.config.weaveRightStayTime?.value || '-';
-            document.getElementById('weaveCircleRadioValue').textContent = this.config.weaveCircleRadio?.value ?? '-';
+            document.getElementById('weaveNumValue').textContent = this.config.weaveNum?.value !== undefined ? this.config.weaveNum.value : '-';
+            document.getElementById('weaveTypeValue').textContent = this.config.weaveType?.value !== undefined ? this.config.weaveType.value : '-';
+            document.getElementById('weaveFreqValue').textContent = this.config.weaveFreq?.value !== undefined ? this.config.weaveFreq.value : '-';
+            document.getElementById('weaveRangeValue').textContent = this.config.weaveRange?.value !== undefined ? this.config.weaveRange.value : '-';
+            document.getElementById('weaveLeftStayTimeValue').textContent = this.config.weaveLeftStayTime?.value !== undefined ? this.config.weaveLeftStayTime.value : '-';
+            document.getElementById('weaveRightStayTimeValue').textContent = this.config.weaveRightStayTime?.value !== undefined ? this.config.weaveRightStayTime.value : '-';
+            document.getElementById('weaveCircleRadioValue').textContent = this.config.weaveCircleRadio?.value !== undefined ? this.config.weaveCircleRadio.value : '-';
 
             // Weave Mode Parameters
-            document.getElementById('weaveIncStayTimeValue').textContent = this.config.weaveIncStayTime?.value ?? '-';
-            document.getElementById('weaveStationaryValue').textContent = this.config.weaveStationary?.value ?? '-';
+            document.getElementById('weaveIncStayTimeValue').textContent = this.config.weaveIncStayTime?.value !== undefined ? this.config.weaveIncStayTime.value : '-';
+            document.getElementById('weaveStationaryValue').textContent = this.config.weaveStationary?.value !== undefined ? this.config.weaveStationary.value : '-';
         } else {
             // Use form values if no config available
             // Basic Arc Parameters
-            document.getElementById('arcNumValue').textContent = document.getElementById('arcNum').value || '-';
-            document.getElementById('arcTimeoutValue').textContent = document.getElementById('arcTimeout').value || '-';
+            document.getElementById('arcNumValue').textContent = document.getElementById('arcNum').value !== '' ? document.getElementById('arcNum').value : '-';
+            document.getElementById('arcTimeoutValue').textContent = document.getElementById('arcTimeout').value !== '' ? document.getElementById('arcTimeout').value : '-';
 
             // Welding Parameters
-            document.getElementById('weldVelValue').textContent = document.getElementById('weldVel').value || '-';
-            document.getElementById('weldCurrValue').textContent = document.getElementById('weldCurr').value || '-';
-            document.getElementById('weldVoltValue').textContent = document.getElementById('weldVolt').value || '-';
+            document.getElementById('weldVelValue').textContent = document.getElementById('weldVel').value !== '' ? document.getElementById('weldVel').value : '-';
+            document.getElementById('weldCurrValue').textContent = document.getElementById('weldCurr').value !== '' ? document.getElementById('weldCurr').value : '-';
+            document.getElementById('weldVoltValue').textContent = document.getElementById('weldVolt').value !== '' ? document.getElementById('weldVolt').value : '-';
 
             // Weaving Parameters
-            document.getElementById('weaveNumValue').textContent = document.getElementById('weaveNum').value || '-';
-            document.getElementById('weaveTypeValue').textContent = document.getElementById('weaveType').value || '-';
-            document.getElementById('weaveFreqValue').textContent = document.getElementById('weaveFreq').value || '-';
-            document.getElementById('weaveRangeValue').textContent = document.getElementById('weaveRange').value || '-';
-            document.getElementById('weaveLeftStayTimeValue').textContent = document.getElementById('weaveLeftStayTime').value || '-';
-            document.getElementById('weaveRightStayTimeValue').textContent = document.getElementById('weaveRightStayTime').value || '-';
-            document.getElementById('weaveCircleRadioValue').textContent = document.getElementById('weaveCircleRadio').value || '-';
+            document.getElementById('weaveNumValue').textContent = document.getElementById('weaveNum').value !== '' ? document.getElementById('weaveNum').value : '-';
+            document.getElementById('weaveTypeValue').textContent = document.getElementById('weaveType').value !== '' ? document.getElementById('weaveType').value : '-';
+            document.getElementById('weaveFreqValue').textContent = document.getElementById('weaveFreq').value !== '' ? document.getElementById('weaveFreq').value : '-';
+            document.getElementById('weaveRangeValue').textContent = document.getElementById('weaveRange').value !== '' ? document.getElementById('weaveRange').value : '-';
+            document.getElementById('weaveLeftStayTimeValue').textContent = document.getElementById('weaveLeftStayTime').value !== '' ? document.getElementById('weaveLeftStayTime').value : '-';
+            document.getElementById('weaveRightStayTimeValue').textContent = document.getElementById('weaveRightStayTime').value !== '' ? document.getElementById('weaveRightStayTime').value : '-';
+            document.getElementById('weaveCircleRadioValue').textContent = document.getElementById('weaveCircleRadio').value !== '' ? document.getElementById('weaveCircleRadio').value : '-';
 
             // Weave Mode Parameters
-            document.getElementById('weaveIncStayTimeValue').textContent = document.getElementById('weaveIncStayTime').value || '-';
-            document.getElementById('weaveStationaryValue').textContent = document.getElementById('weaveStationary').value || '-';
+            document.getElementById('weaveIncStayTimeValue').textContent = document.getElementById('weaveIncStayTime').value !== '' ? document.getElementById('weaveIncStayTime').value : '-';
+            document.getElementById('weaveStationaryValue').textContent = document.getElementById('weaveStationary').value !== '' ? document.getElementById('weaveStationary').value : '-';
         }
     }
 
