@@ -1,0 +1,52 @@
+{
+  "name": "welding-control-app",
+  "version": "1.0.0",
+  "description": "焊机操作控制应用",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "pack": "electron-builder --dir"
+  },
+  "keywords": [
+    "electron",
+    "welding",
+    "control",
+    "chinese"
+  ],
+  "author": "Goft-NBEC",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^37.2.6",
+    "electron-builder": "^24.6.4"
+  },
+  "config": {
+    "electronDownload": {
+      "mirror": "https://npmmirror.com/mirrors/electron/"
+    }
+  },
+  "build": {
+    "appId": "com.welding.control",
+    "productName": "焊机操作控制",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "welding-control.html",
+      "welding-machine.png",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "welding-machine.png"
+    }
+  }
+}
