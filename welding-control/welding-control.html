@@ -3,272 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net; connect-src 'self' http://192.168.58.2:20003; img-src 'self' data:;">
     <title>焊机操作控制</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Consolas', 'Courier New', 'Microsoft YaHei', monospace;
-            background: #1e1e1e;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #ffffff;
+        /* Custom styles for welding control */
+        .control-card {
+            min-height: auto;
+        }
+        
+        .control-button {
+            min-height: 60px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 5px;
+            position: relative;
             overflow: hidden;
         }
-
-        .container {
-            background: #2d2d2d;
-            border: 3px solid #404040;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-            text-align: center;
-            min-width: 600px;
-            position: relative;
+        
+        .control-button.active {
+            box-shadow: 0 0 20px rgba(13, 110, 253, 0.5);
+            transform: scale(1.02);
         }
+        
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #00ff00, #ffff00, #ff0000);
-        }
-
-        .title {
-            color: #00ff00;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px #00ff00;
-        }
-
-        .button-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .control-button {
-            background: #404040;
-            color: #ffffff;
-            border: 2px solid #606060;
-            padding: 30px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            font-family: 'Consolas', monospace;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .control-button::before {
-            content: '';
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            height: 2px;
-            background: #808080;
-        }
-
-        .control-button:hover {
-            background: #505050;
-            border-color: #808080;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-        }
-
-        .control-button:active {
-            background: #303030;
-            transform: translateY(2px);
-        }
-
+        
         .arc-button {
-            background: #4a1a1a;
-            border-color: #8b0000;
-            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #dc3545, #c82333);
         }
-
+        
         .arc-button:hover {
-            background: #5a2a2a;
-            border-color: #a00000;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+            background: linear-gradient(135deg, #c82333, #dc3545);
         }
-
-        .arc-button.active {
-            background: #8b0000;
-            border-color: #ff0000;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
-            color: #ffffff;
+        
+        .wire-button {
+            background: linear-gradient(135deg, #28a745, #20c997);
         }
-
-        .wire-button.active {
-            background: #1a4a4a;
-            border-color: #008b8b;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
-            color: #ffffff;
+        
+        .wire-button:hover {
+            background: linear-gradient(135deg, #20c997, #28a745);
         }
-
+        
         .motion-button {
-            background: #2a2a2a;
-            border-color: #606060;
-            color: #cccccc;
+            background: linear-gradient(135deg, #007bff, #0056b3);
         }
-
+        
         .motion-button:hover {
-            background: #353535;
-            border-color: #808080;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #0056b3, #007bff);
         }
-
-        .motion-button.active {
-            background: #3a3a3a;
-            border-color: #909090;
-            box-shadow: 0 0 20px rgba(144, 144, 144, 0.6);
-            color: #ffffff;
-        }
-
-        .status {
-            background: #1a1a1a;
-            border: 2px solid #404040;
-            border-radius: 4px;
+        
+        .status-display {
+            background-color: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
             padding: 15px;
-            margin-top: 20px;
-            color: #00ff00;
-            font-size: 14px;
-            font-family: 'Consolas', monospace;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
         }
-
-        .status.active {
-            border-color: #00ff00;
-            background: #1a2a1a;
-            color: #00ff00;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-        }
-
-        .status.error {
-            border-color: #ff0000;
-            background: #2a1a1a;
-            color: #ff0000;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-        }
-
-        .led-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #ff0000;
-            margin-right: 10px;
-            animation: blink 1s infinite;
-        }
-
-        .led-indicator.active {
-            background: #00ff00;
-            animation: none;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
-        }
-
-        .system-info {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 10px;
-            color: #808080;
-            font-family: 'Consolas', monospace;
-        }
-
-        .system-info .status {
-            display: inline-block;
-            padding: 2px 6px;
-            border-radius: 3px;
+        
+        .connection-status {
             font-weight: bold;
-            text-transform: uppercase;
-            font-size: 9px;
         }
-
-        .system-info .status.active {
-            background: #00ff00;
-            color: #000000;
+        
+        .connection-status.connected {
+            color: #28a745;
         }
-
-        .system-info .status.error {
-            background: #ff0000;
-            color: #ffffff;
+        
+        .connection-status.disconnected {
+            color: #dc3545;
         }
-
+        
         .timestamp {
-            position: absolute;
-            bottom: 10px;
-            left: 15px;
-            font-size: 10px;
-            color: #808080;
-            font-family: 'Consolas', monospace;
+            color: #6c757d;
+            font-size: 0.9rem;
         }
+
+        /* Toast animation */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="system-info">
-            SYSTEM: WELDING_CONTROL_v1.0<br>
-            STATUS: <span id="connectionStatus">CONNECTING...</span><br>
-            ROBOT: <span id="robotStatus">192.168.58.2:20003</span>
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="row bg-primary text-white py-3">
+            <div class="col">
+                <h1 class="mb-0">
+                    <i class="bi bi-gear-wide-connected me-2"></i>
+                    焊机操作控制
+                </h1>
+            </div>
         </div>
-        
-        <h1 class="title">焊机操作控制</h1>
-        
-        <div class="button-grid">
-            <button class="control-button arc-button" id="arcStart">
-                <span class="led-indicator" id="arcLed"></span>
-                起弧
-            </button>
-            
-            <button class="control-button wire-button" id="wireFeed">
-                <span class="led-indicator" id="feedLed"></span>
-                进丝
-            </button>
-            
-            <button class="control-button wire-button" id="wireRetract">
-                <span class="led-indicator" id="retractLed"></span>
-                退丝
-            </button>
-            
-            <button class="control-button motion-button" id="motionXPlus">
-                <span class="led-indicator" id="motionXPlusLed"></span>
-                点动X+
-            </button>
-            
-            <button class="control-button motion-button" id="motionXMinus">
-                <span class="led-indicator" id="motionXMinusLed"></span>
-                点动X-
-            </button>
+
+        <!-- Main Content -->
+        <div class="row mt-4">
+            <!-- Control Panel -->
+            <div class="col-md-8">
+                <!-- Arc Control -->
+                <div class="card control-card mb-2">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-lightning-fill me-2"></i>
+                            电弧控制
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid">
+                            <button class="btn control-button arc-button" id="arcStart">
+                                <i class="bi bi-play-fill me-2"></i>
+                                起弧
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wire Control -->
+                <div class="card control-card mb-2">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-arrow-repeat me-2"></i>
+                            送丝控制
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-grid">
+                                    <button class="btn control-button wire-button" id="wireFeed">
+                                        <i class="bi bi-arrow-right-circle me-2"></i>
+                                        进丝
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-grid">
+                                    <button class="btn control-button wire-button" id="wireRetract">
+                                        <i class="bi bi-arrow-left-circle me-2"></i>
+                                        退丝
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motion Control -->
+                <div class="card control-card mb-2">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-arrows-move me-2"></i>
+                            运动控制
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-grid">
+                                    <button class="btn control-button motion-button" id="motionXPlus">
+                                        <i class="bi bi-plus-circle me-2"></i>
+                                        点动X+
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-grid">
+                                    <button class="btn control-button motion-button" id="motionXMinus">
+                                        <i class="bi bi-dash-circle me-2"></i>
+                                        点动X-
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Panel -->
+            <div class="col-md-4">
+                <!-- Connection Status -->
+                <div class="card mb-2">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="bi bi-wifi me-2"></i>
+                            连接状态
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="status-display">
+                            <div class="connection-status" id="connectionStatus">CONNECTING...</div>
+                            <div id="connectionDetails" style="font-size: 0.9rem; color: #6c757d; margin-top: 5px;">192.168.58.2:20003</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Robot Status -->
+                <div class="card mb-2">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">
+                            <i class="bi bi-robot me-2"></i>
+                            机器人状态
+                        </h6>
+                        <button class="btn btn-sm btn-outline-warning" id="errorResetBtn" title="重置机器人错误">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="status-display" id="status">
+                            状态: 待机中
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
         </div>
-        
-        <div class="status" id="status">
-            状态: 待机中
-        </div>
-        
-        <div class="timestamp" id="timestamp"></div>
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         const arcStartBtn = document.getElementById('arcStart');
@@ -277,14 +240,9 @@
         const motionXPlusBtn = document.getElementById('motionXPlus');
         const motionXMinusBtn = document.getElementById('motionXMinus');
         const statusDiv = document.getElementById('status');
-        const arcLed = document.getElementById('arcLed');
-        const feedLed = document.getElementById('feedLed');
-        const retractLed = document.getElementById('retractLed');
-        const motionXPlusLed = document.getElementById('motionXPlusLed');
-        const motionXMinusLed = document.getElementById('motionXMinusLed');
-        const timestampDiv = document.getElementById('timestamp');
+
         const connectionStatusDiv = document.getElementById('connectionStatus');
-        const robotStatusDiv = document.getElementById('robotStatus');
+        const connectionDetailsDiv = document.getElementById('connectionDetails');
 
         let arcActive = false;
         let wireFeedActive = false;
@@ -319,26 +277,9 @@
             statusDiv.className = 'status ' + statusClass;
         }
 
-        function updateTimestamp() {
-            const now = new Date();
-            const timeString = now.toLocaleString('zh-CN', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            timestampDiv.textContent = `TIME: ${timeString}`;
-        }
 
-        function updateLeds() {
-            arcLed.className = arcActive ? 'led-indicator active' : 'led-indicator';
-            feedLed.className = wireFeedActive ? 'led-indicator active' : 'led-indicator';
-            retractLed.className = wireRetractActive ? 'led-indicator active' : 'led-indicator';
-            motionXPlusLed.className = motionXPlusActive ? 'led-indicator active' : 'led-indicator';
-            motionXMinusLed.className = motionXMinusActive ? 'led-indicator active' : 'led-indicator';
-        }
+
+
 
 
 
@@ -351,14 +292,12 @@
 
         // 键盘按键状态跟踪
         let keysPressed = new Set();
+        
+        // 防重复调用标志
+        let arcStartDebounce = false;
 
         // 初始化状态
         updateStatus();
-        updateLeds();
-        updateTimestamp();
-        
-        // 每秒更新时间戳
-        setInterval(updateTimestamp, 1000);
 
         // XML-RPC 客户端配置
         const ROBOT_IP = "192.168.58.2";
@@ -714,10 +653,29 @@
                     const value = xmlDoc.querySelector('methodResponse params param value');
                     if (value) {
                         const int = value.querySelector('int');
+                        const i4 = value.querySelector('i4');
                         const double = value.querySelector('double');
                         const string = value.querySelector('string');
+                        const array = value.querySelector('array');
                         
+                        if (array) {
+                            const values = array.querySelectorAll('value');
+                            const result = Array.from(values).map(v => {
+                                const i = v.querySelector('int');
+                                const i4 = v.querySelector('i4');
+                                const d = v.querySelector('double');
+                                const s = v.querySelector('string');
+                                if (i) return parseInt(i.textContent);
+                                if (i4) return parseInt(i4.textContent);
+                                if (d) return parseFloat(d.textContent);
+                                if (s) return s.textContent;
+                                return null;
+                            });
+                            console.log('XML解析数组结果:', result);
+                            return result;
+                        }
                         if (int) return parseInt(int.textContent);
+                        if (i4) return parseInt(i4.textContent);
                         if (double) return parseFloat(double.textContent);
                         if (string) return string.textContent;
                     }
@@ -747,11 +705,16 @@
                     console.log('启动焊接电弧...');
                     
                     // 使用专用的起弧方法
+                    const params = [WELDING_CONFIG.ioType, WELDING_CONFIG.arcNum, WELDING_CONFIG.arcTimeout];
+                    console.log(`🔵 ARCStart() → 起弧启动 - 参数:`, params);
+                    
                     const result = await this.robotClient.call('ARCStart', 
                         WELDING_CONFIG.ioType,      // IO类型: 0-控制器IO, 1-扩展IO
                         WELDING_CONFIG.arcNum,      // 焊机配置文件编号
                         WELDING_CONFIG.arcTimeout   // 起弧超时时间
                     );
+                    
+                    console.log(`🟢 ARCStart() → 返回值:`, result);
                     
                     if (result.error || result !== 0) {
                         console.error('起弧失败:', result.error || `错误码: ${result}`);
@@ -773,11 +736,16 @@
                     console.log('停止焊接电弧...');
                     
                     // 使用专用的结束焊接方法
+                    const params = [WELDING_CONFIG.ioType, WELDING_CONFIG.arcNum, WELDING_CONFIG.arcTimeout];
+                    console.log(`🔵 ARCEnd() → 起弧停止 - 参数:`, params);
+                    
                     const result = await this.robotClient.call('ARCEnd', 
                         WELDING_CONFIG.ioType,      // IO类型: 0-控制器IO, 1-扩展IO
                         WELDING_CONFIG.arcNum,      // 焊机配置文件编号
                         WELDING_CONFIG.arcTimeout   // 熄弧超时时间
                     );
+                    
+                    console.log(`🟢 ARCEnd() → 返回值:`, result);
                     
                     // ARCEnd方法通常会返回0表示成功
                     if (result.error && result !== 0) {
@@ -800,10 +768,15 @@
                     console.log('启动焊丝送进...');
                     
                     // 使用专用的正向送丝方法
+                    const params = [WELDING_CONFIG.ioType, 1];
+                    console.log(`🔵 SetForwardWireFeed() → 进丝控制 - 参数:`, params);
+                    
                     const result = await this.robotClient.call('SetForwardWireFeed', 
                         WELDING_CONFIG.ioType,      // IO类型: 0-控制器IO, 1-扩展IO
                         1                           // 送丝控制: 1-送丝
                     );
+                    
+                    console.log(`🟢 SetForwardWireFeed() → 返回值:`, result);
                     
                     if (result.error || result !== 0) {
                         console.error('进丝失败:', result.error || `错误码: ${result}`);
@@ -825,10 +798,15 @@
                     console.log('停止焊丝送进...');
                     
                     // 使用专用的正向送丝方法停止送丝
+                    const params = [WELDING_CONFIG.ioType, 0];
+                    console.log(`🔵 SetForwardWireFeed() → 进丝控制(停止) - 参数:`, params);
+                    
                     const result = await this.robotClient.call('SetForwardWireFeed', 
                         WELDING_CONFIG.ioType,      // IO类型: 0-控制器IO, 1-扩展IO
                         0                           // 送丝控制: 0-停止送丝
                     );
+                    
+                    console.log(`🟢 SetForwardWireFeed() → 返回值:`, result);
                     
                     if (result.error && result !== 0) {
                         console.warn('停止进丝方法调用失败，但继续执行:', result.error || `错误码: ${result}`);
@@ -850,10 +828,15 @@
                     console.log('启动焊丝回退...');
                     
                     // 使用专用的反向送丝方法
+                    const params = [WELDING_CONFIG.ioType, 1];
+                    console.log(`🔵 SetReverseWireFeed() → 退丝控制 - 参数:`, params);
+                    
                     const result = await this.robotClient.call('SetReverseWireFeed', 
                         WELDING_CONFIG.ioType,      // IO类型: 0-控制器IO, 1-扩展IO
                         1                           // 送丝控制: 1-送丝 (反向)
                     );
+                    
+                    console.log(`🟢 SetReverseWireFeed() → 返回值:`, result);
                     
                     if (result.error || result !== 0) {
                         console.error('退丝失败:', result.error || `错误码: ${result}`);
@@ -875,10 +858,15 @@
                     console.log('停止焊丝回退...');
                     
                     // 使用专用的反向送丝方法停止送丝
+                    const params = [WELDING_CONFIG.ioType, 0];
+                    console.log(`🔵 SetReverseWireFeed() → 退丝控制(停止) - 参数:`, params);
+                    
                     const result = await this.robotClient.call('SetReverseWireFeed', 
                         WELDING_CONFIG.ioType,      // IO类型: 0-控制器IO, 1-扩展IO
                         0                           // 送丝控制: 0-停止送丝
                     );
+                    
+                    console.log(`🟢 SetReverseWireFeed() → 返回值:`, result);
                     
                     if (result.error && result !== 0) {
                         console.warn('停止退丝方法调用失败，但继续执行:', result.error || `错误码: ${result}`);
@@ -901,6 +889,9 @@
                     
                     // 使用StartJOG方法进行X轴正向运动
                     // ref=2(基坐标系), nb=1(X轴), dir=1(正方向), max_dis=100mm, vel=10%
+                    const params = [2, 1, 1, parseFloat(100.0), parseFloat(10.0), parseFloat(100.0)];
+                    console.log(`🔵 StartJOG() → 点动运动(X+正向) - 参数:`, params);
+                    
                     const result = await this.robotClient.call('StartJOG', 
                         2,              // ref: 基坐标系点动
                         1,              // nb: X轴
@@ -909,6 +900,8 @@
                         parseFloat(10.0),   // vel: 10% 速度 (强制作为double)
                         parseFloat(100.0)   // acc: 100% 加速度 (强制作为double)
                     );
+                    
+                    console.log(`🟢 StartJOG() → 返回值:`, result);
                     
                     if (result.error || result !== 0) {
                         console.error('运动测试启动失败:', result.error || `错误码: ${result}`);
@@ -931,7 +924,12 @@
                     
                     // 使用StopJOG方法停止基坐标系点动
                     // ref=3 表示基坐标系点动停止
+                    const params = [3];
+                    console.log(`🔵 StopJOG() → 停止运动 - 参数:`, params);
+                    
                     const result = await this.robotClient.call('StopJOG', 3);
+                    
+                    console.log(`🟢 StopJOG() → 返回值:`, result);
                     
                     if (result.error && result !== 0) {
                         console.warn('停止运动测试方法调用失败，但继续执行:', result.error || `错误码: ${result}`);
@@ -954,6 +952,9 @@
                     
                     // 使用StartJOG方法进行X轴负向运动
                     // ref=2(基坐标系), nb=1(X轴), dir=0(负方向), max_dis=100mm, vel=10%
+                    const params = [2, 1, 0, parseFloat(100.0), parseFloat(10.0), parseFloat(100.0)];
+                    console.log(`🔵 StartJOG() → 点动运动(X-负向) - 参数:`, params);
+                    
                     const result = await this.robotClient.call('StartJOG', 
                         2,              // ref: 基坐标系点动
                         1,              // nb: X轴
@@ -962,6 +963,8 @@
                         parseFloat(10.0),   // vel: 10% 速度 (强制作为double)
                         parseFloat(100.0)   // acc: 100% 加速度 (强制作为double)
                     );
+                    
+                    console.log(`🟢 StartJOG() → 返回值:`, result);
                     
                     if (result.error || result !== 0) {
                         console.error('点动X-启动失败:', result.error || `错误码: ${result}`);
@@ -984,7 +987,12 @@
                     
                     // 使用StopJOG方法停止基坐标系点动
                     // ref=3 表示基坐标系点动停止
+                    const params = [3];
+                    console.log(`🔵 StopJOG() → 停止运动 - 参数:`, params);
+                    
                     const result = await this.robotClient.call('StopJOG', 3);
+                    
+                    console.log(`🟢 StopJOG() → 返回值:`, result);
                     
                     if (result.error && result !== 0) {
                         console.warn('停止点动X-方法调用失败，但继续执行:', result.error || `错误码: ${result}`);
@@ -1003,57 +1011,378 @@
             // 获取机器人状态
             async getRobotStatus() {
                 try {
-                    const result = await this.robotClient.call('GetRobotErrorCode');
-                    if (result.error) {
-                        return { error: result.error };
-                    }
-                    return { errorCode: result };
-                } catch (error) {
-                    return { error: error.message };
+                                    const result = await this.robotClient.call('GetRobotErrorCode');
+                if (result.error) {
+                    return { error: result.error };
                 }
+                return { errorCode: result };
+            } catch (error) {
+                return { error: error.message };
+            }
             }
         }
 
         // 创建焊接控制器实例
         const weldingController = new WeldingController(robotClient);
 
+        // 机器人信息管理类
+        class RobotInfoManager {
+            constructor(robotClient) {
+                this.robotClient = robotClient;
+                this.errorStatus = {
+                    mainCode: 0,
+                    subCode: 0,
+                    lastCheckTime: null
+                };
+            }
+
+            // 检查并清理机器人错误代码
+            async checkAndClearErrors() {
+                try {
+                    console.log("\n=== 检查并清理机器人错误代码 ===");
+                    
+                    // 获取当前错误代码
+                    const errorResult = await this.robotClient.call('GetRobotErrorCode');
+                    console.log("GetRobotErrorCode 原始返回值:", errorResult);
+                    
+                    if (errorResult !== null && errorResult !== undefined && !errorResult.error) {
+                        // 解析错误代码，GetRobotErrorCode返回格式为 [error_status, maincode, subcode]
+                        let maincode, subcode, error_status;
+                        
+                        if (Array.isArray(errorResult)) {
+                            // 正确的格式：[error_status, maincode, subcode]
+                            error_status = errorResult[0] || 0;
+                            maincode = errorResult[1] || 0;
+                            subcode = errorResult[2] || 0;
+                            console.log(`GetRobotErrorCode解析: error_status=${error_status}, maincode=${maincode}, subcode=${subcode}`);
+                        } else if (typeof errorResult === 'number') {
+                            // 如果返回单个数值，可能需要解析为主码和子码
+                            error_status = 0;
+                            maincode = Math.floor(errorResult / 1000);
+                            subcode = errorResult % 1000;
+                            console.log(`单数值解析: maincode=${maincode}, subcode=${subcode}`);
+                        } else if (errorResult === 0) {
+                            // 如果返回0，表示无错误
+                            error_status = 0;
+                            maincode = 0;
+                            subcode = 0;
+                        } else {
+                            // 其他情况，假设无错误
+                            console.warn("未知的错误代码格式:", errorResult, "假设无错误");
+                            error_status = 0;
+                            maincode = 0;
+                            subcode = 0;
+                        }
+                        
+                        console.log(`当前机器人错误代码 - 主码: ${maincode}, 子码: ${subcode}`);
+                        
+                        // 更新错误状态
+                        this.errorStatus.mainCode = maincode;
+                        this.errorStatus.subCode = subcode;
+                        this.errorStatus.lastCheckTime = new Date();
+                        
+                        // 如果有错误，尝试重置
+                        if (maincode !== 0 || subcode !== 0) {
+                            console.log("检测到机器人错误，正在尝试重置...");
+                            
+                            // 调用重置错误方法
+                            const resetResult = await this.robotClient.call('ResetAllError');
+                            console.log("重置错误结果:", resetResult);
+                            
+                            // 等待1秒
+                            await this.sleep(1000);
+                            
+                            // 再次检查错误代码
+                            const recheckResult = await this.robotClient.call('GetRobotErrorCode');
+                            console.log("重置后错误代码检查结果:", recheckResult);
+                            
+                            if (recheckResult !== null && recheckResult !== undefined && !recheckResult.error) {
+                                let newMaincode, newSubcode, newErrorStatus;
+                                
+                                if (Array.isArray(recheckResult)) {
+                                    // 正确的格式：[error_status, maincode, subcode]
+                                    newErrorStatus = recheckResult[0] || 0;
+                                    newMaincode = recheckResult[1] || 0;
+                                    newSubcode = recheckResult[2] || 0;
+                                    console.log(`重置后GetRobotErrorCode解析: error_status=${newErrorStatus}, maincode=${newMaincode}, subcode=${newSubcode}`);
+                                } else if (typeof recheckResult === 'number') {
+                                    newErrorStatus = 0;
+                                    newMaincode = Math.floor(recheckResult / 1000);
+                                    newSubcode = recheckResult % 1000;
+                                } else if (recheckResult === 0) {
+                                    newErrorStatus = 0;
+                                    newMaincode = 0;
+                                    newSubcode = 0;
+                                } else {
+                                    console.warn("重置后未知的错误代码格式:", recheckResult, "假设无错误");
+                                    newErrorStatus = 0;
+                                    newMaincode = 0;
+                                    newSubcode = 0;
+                                }
+                                
+                                console.log(`重置后错误代码 - 主码: ${newMaincode}, 子码: ${newSubcode}`);
+                                
+                                // 更新错误状态
+                                this.errorStatus.mainCode = newMaincode;
+                                this.errorStatus.subCode = newSubcode;
+                                
+                                if (newMaincode === 0 && newSubcode === 0) {
+                                    console.log("✅ 机器人错误已成功重置");
+                                    this.updateErrorStatusUI(true, "错误已重置");
+                                    return true;
+                                } else {
+                                    console.log("⚠️ 机器人错误重置失败，请手动检查");
+                                    this.updateErrorStatusUI(false, `重置失败 - 主码:${newMaincode} 子码:${newSubcode}`);
+                                    return false;
+                                }
+                            } else {
+                                console.log("⚠️ 重置后无法检查错误状态，错误信息:", recheckResult?.error);
+                                this.updateErrorStatusUI(false, "重置后检查失败");
+                                return false;
+                            }
+                        } else {
+                            console.log("✅ 机器人当前无错误代码");
+                            this.updateErrorStatusUI(true, "无错误");
+                            return true;
+                        }
+                    } else {
+                        const errorMsg = errorResult?.error || "未知错误";
+                        console.error('获取错误代码失败:', errorMsg, "原始结果:", errorResult);
+                        this.updateErrorStatusUI(false, `获取失败: ${errorMsg}`);
+                        return false;
+                    }
+                } catch (error) {
+                    console.error('检查错误代码过程中发生异常:', error);
+                    this.updateErrorStatusUI(false, `检查异常: ${error.message}`);
+                    return false;
+                }
+            }
+
+            // 更新错误状态UI显示
+            updateErrorStatusUI(isOk, message) {
+                const systemStatusDiv = document.getElementById('status');
+                const statusIcon = isOk ? '✅' : '⚠️';
+                const statusColor = isOk ? '#28a745' : '#dc3545';
+                const timeStr = new Date().toLocaleTimeString('zh-CN');
+                
+                // 如果有错误，显示详细信息；如果无错误或检查失败，简化显示
+                if (isOk && this.errorStatus.mainCode === 0 && this.errorStatus.subCode === 0) {
+                    systemStatusDiv.innerHTML = `
+                        <div style="color: ${statusColor};">
+                            ${statusIcon} 系统状态: ${message}
+                        </div>
+                        <div style="font-size: 0.8rem; color: #6c757d; margin-top: 2px;">
+                            检查时间: ${timeStr}
+                        </div>
+                    `;
+                } else if (!isOk && (this.errorStatus.mainCode !== 0 || this.errorStatus.subCode !== 0)) {
+                    systemStatusDiv.innerHTML = `
+                        <div style="color: ${statusColor};">
+                            ${statusIcon} 错误状态: ${message}
+                        </div>
+                        <div style="font-size: 0.85rem; color: #6c757d; margin-top: 5px;">
+                            主码: ${this.errorStatus.mainCode} | 子码: ${this.errorStatus.subCode}
+                        </div>
+                        <div style="font-size: 0.8rem; color: #6c757d; margin-top: 2px;">
+                            检查时间: ${timeStr}
+                        </div>
+                    `;
+                } else {
+                    // 检查失败或其他情况
+                    systemStatusDiv.innerHTML = `
+                        <div style="color: ${statusColor};">
+                            ${statusIcon} 系统状态: ${message}
+                        </div>
+                        <div style="font-size: 0.8rem; color: #6c757d; margin-top: 2px;">
+                            检查时间: ${timeStr}
+                        </div>
+                    `;
+                }
+            }
+
+            // 辅助方法：延时
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            // 获取当前错误状态
+            getErrorStatus() {
+                return {
+                    ...this.errorStatus
+                };
+            }
+        }
+
+        // 创建机器人信息管理器实例
+        const robotInfoManager = new RobotInfoManager(robotClient);
+
+        // 错误重置按钮事件处理器
+        const errorResetBtn = document.getElementById('errorResetBtn');
+        errorResetBtn.addEventListener('click', async () => {
+            console.log('用户手动触发错误重置...');
+            
+            // 显示加载状态
+            errorResetBtn.disabled = true;
+            errorResetBtn.innerHTML = '<i class="bi bi-arrow-clockwise spinner-border spinner-border-sm"></i>';
+            
+            try {
+                // 调用错误检查和清理方法
+                const result = await robotInfoManager.checkAndClearErrors();
+                
+                if (result) {
+                    console.log('手动错误重置成功');
+                    // 可以添加成功提示
+                    errorResetBtn.classList.remove('btn-outline-warning');
+                    errorResetBtn.classList.add('btn-outline-success');
+                    setTimeout(() => {
+                        errorResetBtn.classList.remove('btn-outline-success');
+                        errorResetBtn.classList.add('btn-outline-warning');
+                    }, 2000);
+                } else {
+                    console.warn('手动错误重置过程中遇到问题');
+                    // 可以添加警告提示
+                    errorResetBtn.classList.remove('btn-outline-warning');
+                    errorResetBtn.classList.add('btn-outline-danger');
+                    setTimeout(() => {
+                        errorResetBtn.classList.remove('btn-outline-danger');
+                        errorResetBtn.classList.add('btn-outline-warning');
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error('手动错误重置失败:', error);
+                errorResetBtn.classList.remove('btn-outline-warning');
+                errorResetBtn.classList.add('btn-outline-danger');
+                setTimeout(() => {
+                    errorResetBtn.classList.remove('btn-outline-danger');
+                    errorResetBtn.classList.add('btn-outline-warning');
+                }, 2000);
+            } finally {
+                // 恢复按钮状态
+                errorResetBtn.disabled = false;
+                errorResetBtn.innerHTML = '<i class="bi bi-arrow-clockwise"></i>';
+            }
+        });
+
+        // 状态提示函数
+        function showStatusToast(message, type = 'info') {
+            // 创建提示元素
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} alert-dismissible fade show`;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                min-width: 250px;
+                max-width: 400px;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            
+            toast.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            // 添加到页面
+            document.body.appendChild(toast);
+            
+            // 3秒后自动移除
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.classList.add('fade');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            document.body.removeChild(toast);
+                        }
+                    }, 150);
+                }
+            }, 3000);
+        }
+
         // 修改现有的事件处理器，集成焊接控制
-        arcStartBtn.addEventListener('mousedown', async () => {
-            // 按下鼠标开始起弧
+        // 统一的起弧开始函数
+        async function startArcAction() {
+            if (arcActive) {
+                console.log('🔵 起弧已激活，跳过重复启动');
+                return; // 防止重复启动
+            }
+            
+            // 防止快速重复调用
+            if (arcStartBtn.disabled) {
+                console.log('🔵 起弧按钮已禁用，跳过重复启动');
+                return;
+            }
+            
+            // 防重复调用检查
+            if (arcStartDebounce) {
+                console.log('🔵 起弧防重复调用激活，跳过本次调用');
+                return;
+            }
+            
+            arcStartDebounce = true;
+            console.log('🔵 开始起弧操作...');
+            
+            // 显示启动中状态
+            arcStartBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>启动中...';
+            arcStartBtn.disabled = true;
+            
             const success = await weldingController.startArc();
             if (success) {
                 arcActive = true;
                 updateStatus();
                 arcStartBtn.classList.add('active');
-                arcStartBtn.innerHTML = '<span class="led-indicator active" id="arcLed"></span>起弧中...';
-                updateLeds();
+                arcStartBtn.innerHTML = '<i class="bi bi-lightning-fill me-2"></i>起弧中...';
+                arcStartBtn.disabled = false;
+                console.log('🟢 起弧成功启动');
+                
+                // 可选：显示成功提示
+                showStatusToast('✅ 起弧成功启动', 'success');
             } else {
-                console.error('起弧失败');
-                // 可以在这里添加错误提示UI
+                console.error('🔴 起弧失败');
+                arcStartBtn.classList.remove('active');
+                arcStartBtn.innerHTML = '<i class="bi bi-exclamation-triangle me-2"></i>起弧失败';
+                arcStartBtn.disabled = false;
+                
+                // 显示失败提示
+                showStatusToast('❌ 起弧启动失败', 'error');
+                
+                // 3秒后恢复正常状态
+                setTimeout(() => {
+                    arcStartBtn.innerHTML = '<i class="bi bi-play-fill me-2"></i>起弧';
+                }, 3000);
             }
-        });
+            
+            // 重置防重复调用标志
+            setTimeout(() => {
+                arcStartDebounce = false;
+            }, 500);
+        }
 
-        arcStartBtn.addEventListener('mouseup', async () => {
-            // 释放鼠标停止起弧
+        // 统一的起弧停止函数
+        async function stopArcAction() {
+            if (!arcActive) return; // 只在活跃时停止
+            
+            console.log('停止起弧操作...');
+            
+            // 显示停止中状态
+            arcStartBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>停止中...';
+            arcStartBtn.disabled = true;
+            
             await weldingController.stopArc();
             arcActive = false;
             updateStatus();
             arcStartBtn.classList.remove('active');
-            arcStartBtn.innerHTML = '<span class="led-indicator" id="arcLed"></span>起弧';
-            updateLeds();
-        });
+            arcStartBtn.innerHTML = '<i class="bi bi-play-fill me-2"></i>起弧';
+            arcStartBtn.disabled = false;
+            console.log('起弧已停止');
+            
+            // 可选：显示停止提示
+            showStatusToast('⏹️ 起弧已停止', 'info');
+        }
 
-        arcStartBtn.addEventListener('mouseleave', async () => {
-            // 鼠标离开按钮时停止起弧
-            if (arcActive) {
-                await weldingController.stopArc();
-                arcActive = false;
-                updateStatus();
-                arcStartBtn.classList.remove('active');
-                arcStartBtn.innerHTML = '<span class="led-indicator" id="arcLed"></span>起弧';
-                updateLeds();
-            }
-        });
+        arcStartBtn.addEventListener('mousedown', startArcAction);
+        arcStartBtn.addEventListener('mouseup', stopArcAction);
+        arcStartBtn.addEventListener('mouseleave', stopArcAction);
 
         wireFeedBtn.addEventListener('mousedown', async () => {
             // 按下鼠标开始进丝
@@ -1062,8 +1391,7 @@
                 wireFeedActive = true;
                 updateStatus();
                 wireFeedBtn.classList.add('active');
-                wireFeedBtn.innerHTML = '<span class="led-indicator active" id="feedLed"></span>进丝中...';
-                updateLeds();
+                wireFeedBtn.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>进丝中...';
             } else {
                 console.error('进丝失败');
             }
@@ -1075,8 +1403,7 @@
             wireFeedActive = false;
             updateStatus();
             wireFeedBtn.classList.remove('active');
-            wireFeedBtn.innerHTML = '<span class="led-indicator" id="feedLed"></span>进丝';
-            updateLeds();
+            wireFeedBtn.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>进丝';
         });
 
         wireFeedBtn.addEventListener('mouseleave', async () => {
@@ -1086,8 +1413,7 @@
                 wireFeedActive = false;
                 updateStatus();
                 wireFeedBtn.classList.remove('active');
-                wireFeedBtn.innerHTML = '<span class="led-indicator" id="feedLed"></span>进丝';
-                updateLeds();
+                wireFeedBtn.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>进丝';
             }
         });
 
@@ -1098,8 +1424,7 @@
                 wireRetractActive = true;
                 updateStatus();
                 wireRetractBtn.classList.add('active');
-                wireRetractBtn.innerHTML = '<span class="led-indicator active" id="retractLed"></span>退丝中...';
-                updateLeds();
+                wireRetractBtn.innerHTML = '<i class="bi bi-arrow-left-circle me-2"></i>退丝中...';
             } else {
                 console.error('退丝失败');
             }
@@ -1111,8 +1436,7 @@
             wireRetractActive = false;
             updateStatus();
             wireRetractBtn.classList.remove('active');
-            wireRetractBtn.innerHTML = '<span class="led-indicator" id="retractLed"></span>退丝';
-            updateLeds();
+            wireRetractBtn.innerHTML = '<i class="bi bi-arrow-left-circle me-2"></i>退丝';
         });
 
         wireRetractBtn.addEventListener('mouseleave', async () => {
@@ -1122,8 +1446,7 @@
                 wireRetractActive = false;
                 updateStatus();
                 wireRetractBtn.classList.remove('active');
-                wireRetractBtn.innerHTML = '<span class="led-indicator" id="retractLed"></span>退丝';
-                updateLeds();
+                wireRetractBtn.innerHTML = '<i class="bi bi-arrow-left-circle me-2"></i>退丝';
             }
         });
 
@@ -1135,8 +1458,7 @@
                 motionXPlusActive = true;
                 updateStatus();
                 motionXPlusBtn.classList.add('active');
-                motionXPlusBtn.innerHTML = '<span class="led-indicator active" id="motionXPlusLed"></span>运动中...';
-                updateLeds();
+                motionXPlusBtn.innerHTML = '<i class="bi bi-plus-circle me-2"></i>运动中...';
             } else {
                 console.error('点动X+失败');
             }
@@ -1148,8 +1470,7 @@
             motionXPlusActive = false;
             updateStatus();
             motionXPlusBtn.classList.remove('active');
-            motionXPlusBtn.innerHTML = '<span class="led-indicator" id="motionXPlusLed"></span>点动X+';
-            updateLeds();
+            motionXPlusBtn.innerHTML = '<i class="bi bi-plus-circle me-2"></i>点动X+';
         });
 
         motionXPlusBtn.addEventListener('mouseleave', async () => {
@@ -1159,8 +1480,7 @@
                 motionXPlusActive = false;
                 updateStatus();
                 motionXPlusBtn.classList.remove('active');
-                motionXPlusBtn.innerHTML = '<span class="led-indicator" id="motionXPlusLed"></span>点动X+';
-                updateLeds();
+                motionXPlusBtn.innerHTML = '<i class="bi bi-plus-circle me-2"></i>点动X+';
             }
         });
 
@@ -1172,8 +1492,7 @@
                 motionXMinusActive = true;
                 updateStatus();
                 motionXMinusBtn.classList.add('active');
-                motionXMinusBtn.innerHTML = '<span class="led-indicator active" id="motionXMinusLed"></span>运动中...';
-                updateLeds();
+                motionXMinusBtn.innerHTML = '<i class="bi bi-dash-circle me-2"></i>运动中...';
             } else {
                 console.error('点动X-失败');
             }
@@ -1185,8 +1504,7 @@
             motionXMinusActive = false;
             updateStatus();
             motionXMinusBtn.classList.remove('active');
-            motionXMinusBtn.innerHTML = '<span class="led-indicator" id="motionXMinusLed"></span>点动X-';
-            updateLeds();
+            motionXMinusBtn.innerHTML = '<i class="bi bi-dash-circle me-2"></i>点动X-';
         });
 
         motionXMinusBtn.addEventListener('mouseleave', async () => {
@@ -1196,8 +1514,7 @@
                 motionXMinusActive = false;
                 updateStatus();
                 motionXMinusBtn.classList.remove('active');
-                motionXMinusBtn.innerHTML = '<span class="led-indicator" id="motionXMinusLed"></span>点动X-';
-                updateLeds();
+                motionXMinusBtn.innerHTML = '<i class="bi bi-dash-circle me-2"></i>点动X-';
             }
         });
 
@@ -1208,14 +1525,10 @@
             // 检查是否按下起弧组合键 (Ctrl + Alt + P)
             if (keysPressed.has('control') && keysPressed.has('alt') && keysPressed.has('p')) {
                 if (!arcActive) {
-                    const success = await weldingController.startArc();
-                    if (success) {
-                        arcActive = true;
-                        updateStatus();
-                        arcStartBtn.classList.add('active');
-                        arcStartBtn.innerHTML = '<span class="led-indicator active" id="arcLed"></span>起弧中...';
-                        updateLeds();
-                    }
+                    console.log('🔵 键盘快捷键: Ctrl+Alt+P 触发起弧');
+                    await startArcAction();
+                } else {
+                    console.log('🔵 键盘快捷键: Ctrl+Alt+P 已按下，但起弧已激活，跳过');
                 }
             }
             
@@ -1227,8 +1540,7 @@
                         wireFeedActive = true;
                         updateStatus();
                         wireFeedBtn.classList.add('active');
-                        wireFeedBtn.innerHTML = '<span class="led-indicator active" id="feedLed"></span>进丝中...';
-                        updateLeds();
+                        wireFeedBtn.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>进丝中...';
                     }
                 }
             }
@@ -1241,8 +1553,7 @@
                         wireRetractActive = true;
                         updateStatus();
                         wireRetractBtn.classList.add('active');
-                        wireRetractBtn.innerHTML = '<span class="led-indicator active" id="retractLed"></span>退丝中...';
-                        updateLeds();
+                        wireRetractBtn.innerHTML = '<i class="bi bi-arrow-left-circle me-2"></i>退丝中...';
                     }
                 }
             }
@@ -1253,14 +1564,7 @@
             
             // 检查是否释放起弧组合键
             if (!keysPressed.has('control') || !keysPressed.has('alt') || !keysPressed.has('p')) {
-                if (arcActive) {
-                    await weldingController.stopArc();
-                    arcActive = false;
-                    updateStatus();
-                    arcStartBtn.classList.remove('active');
-                    arcStartBtn.innerHTML = '<span class="led-indicator" id="arcLed"></span>起弧';
-                    updateLeds();
-                }
+                await stopArcAction();
             }
             
             // 检查是否释放进丝组合键
@@ -1270,8 +1574,7 @@
                     wireFeedActive = false;
                     updateStatus();
                     wireFeedBtn.classList.remove('active');
-                    wireFeedBtn.innerHTML = '<span class="led-indicator" id="feedLed"></span>进丝';
-                    updateLeds();
+                    wireFeedBtn.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>进丝';
                 }
             }
             
@@ -1282,8 +1585,7 @@
                     wireRetractActive = false;
                     updateStatus();
                     wireRetractBtn.classList.remove('active');
-                    wireRetractBtn.innerHTML = '<span class="led-indicator" id="retractLed"></span>退丝';
-                    updateLeds();
+                    wireRetractBtn.innerHTML = '<i class="bi bi-arrow-left-circle me-2"></i>退丝';
                 }
             }
         });
@@ -1295,19 +1597,16 @@
                 if (status.error) {
                     console.warn('机器人连接状态:', status.error);
                     connectionStatusDiv.textContent = '连接失败';
-                    connectionStatusDiv.className = 'status error';
-                    robotStatusDiv.textContent = 'N/A';
+                    connectionStatusDiv.className = 'connection-status disconnected';
                 } else {
                     console.log('机器人连接正常, 错误码:', status.errorCode);
                     connectionStatusDiv.textContent = '已连接';
-                    connectionStatusDiv.className = 'status active';
-                    robotStatusDiv.textContent = `${ROBOT_IP}:${ROBOT_PORT}`;
+                    connectionStatusDiv.className = 'connection-status connected';
                 }
             } catch (error) {
                 console.error('检查机器人连接失败:', error);
                 connectionStatusDiv.textContent = '连接失败';
-                connectionStatusDiv.className = 'status error';
-                robotStatusDiv.textContent = 'N/A';
+                connectionStatusDiv.className = 'connection-status disconnected';
             }
         }
 
@@ -1342,9 +1641,9 @@
             
             try {
                 // 尝试调用一个简单的机器人方法
-                console.log('尝试调用GetSDKVersion方法...');
-                const result = await robotClient.call('GetSDKVersion');
-                console.log('GetSDKVersion调用结果:', result);
+                console.log('尝试调用GetRobotErrorCode方法测试连接...');
+                const result = await robotClient.call('GetRobotErrorCode');
+                console.log('GetRobotErrorCode调用结果:', result);
                 
                 if (result && result.error) {
                     console.error('XML-RPC连接测试失败:', result.error);
@@ -1359,6 +1658,50 @@
             }
         }
 
+        // 初始化机器人连接后的处理流程
+        async function initializeRobotConnection() {
+            console.log('开始初始化机器人连接流程...');
+            
+            try {
+                // 1. 更新连接详情显示
+                connectionDetailsDiv.textContent = `${ROBOT_IP}:${ROBOT_PORT}`;
+                
+                // 2. 检查并清理机器人错误代码
+                console.log('步骤1: 检查和清理错误代码');
+                const errorResult = await robotInfoManager.checkAndClearErrors();
+                
+                if (errorResult) {
+                    console.log('错误检查和清理完成');
+                } else {
+                    console.warn('错误检查过程中遇到问题');
+                }
+                
+                // 3. 更新连接状态为成功
+                connectionStatusDiv.textContent = '已连接';
+                connectionStatusDiv.className = 'connection-status connected';
+                
+                console.log('机器人连接初始化流程完成');
+                return true;
+                
+            } catch (error) {
+                console.error('初始化机器人连接过程中发生错误:', error);
+                
+                // 更新连接状态为失败
+                connectionStatusDiv.textContent = '初始化失败';
+                connectionStatusDiv.className = 'connection-status disconnected';
+                
+                // 更新系统状态
+                const systemStatusDiv = document.getElementById('status');
+                systemStatusDiv.innerHTML = `
+                    <div style="color: #dc3545;">
+                        ⚠️ 初始化失败
+                    </div>
+                `;
+                
+                return false;
+            }
+        }
+
         // 页面加载完成后检查连接
         window.addEventListener('load', async () => {
             setTimeout(async () => {
@@ -1367,19 +1710,95 @@
                 // 首先测试XML-RPC连接
                 const xmlrpcTest = await testXMLRPCConnection();
                 if (xmlrpcTest) {
-                    console.log('XML-RPC连接正常，继续检查机器人状态...');
-                    await checkRobotConnection();
+                    console.log('XML-RPC连接正常，开始初始化机器人连接...');
+                    
+                    // 执行完整的初始化流程：版本获取 + 错误检查和清理
+                    const initResult = await initializeRobotConnection();
+                    
+                    if (initResult) {
+                        console.log('机器人初始化成功，连接已就绪');
+                    } else {
+                        console.warn('机器人初始化过程中遇到问题，但连接可能仍然可用');
+                    }
                 } else {
                     console.error('XML-RPC连接失败，无法与机器人通信');
                     connectionStatusDiv.textContent = 'XML-RPC失败';
-                    connectionStatusDiv.className = 'status error';
-                    robotStatusDiv.textContent = 'N/A';
+                    connectionStatusDiv.className = 'connection-status disconnected';
+                    
+                    // 更新系统状态
+                    const systemStatusDiv = document.getElementById('status');
+                    systemStatusDiv.innerHTML = `
+                        <div style="color: #dc3545;">
+                            ⚠️ 无法连接到机器人
+                        </div>
+                        <div style="font-size: 0.85rem; color: #6c757d; margin-top: 5px;">
+                            请检查网络连接和机器人状态
+                        </div>
+                    `;
                 }
             }, 2000); // 延迟2秒检查，等待页面完全加载
         });
 
-        // 定期检查连接状态（每30秒）
-        setInterval(checkRobotConnection, 30000);
+        // 定期检查连接状态和错误代码（每30秒）
+        setInterval(async () => {
+            console.log('定期检查机器人状态...');
+            
+            // 检查连接状态
+            await checkRobotConnection();
+            
+            // 检查错误代码（但不自动重置，只显示状态）
+            try {
+                const errorResult = await robotInfoManager.robotClient.call('GetRobotErrorCode');
+                console.log('定期检查 - GetRobotErrorCode 返回值:', errorResult);
+                
+                if (errorResult !== null && errorResult !== undefined && !errorResult.error) {
+                    let maincode, subcode, error_status;
+                    
+                    if (Array.isArray(errorResult)) {
+                        // 正确的格式：[error_status, maincode, subcode]
+                        error_status = errorResult[0] || 0;
+                        maincode = errorResult[1] || 0;
+                        subcode = errorResult[2] || 0;
+                        console.log(`定期检查GetRobotErrorCode解析: error_status=${error_status}, maincode=${maincode}, subcode=${subcode}`);
+                    } else if (typeof errorResult === 'number') {
+                        error_status = 0;
+                        maincode = Math.floor(errorResult / 1000);
+                        subcode = errorResult % 1000;
+                    } else if (errorResult === 0) {
+                        error_status = 0;
+                        maincode = 0;
+                        subcode = 0;
+                    } else {
+                        console.warn("定期检查 - 未知的错误代码格式:", errorResult, "假设无错误");
+                        error_status = 0;
+                        maincode = 0;
+                        subcode = 0;
+                    }
+                    
+                    console.log(`定期检查 - 错误代码: 主码: ${maincode}, 子码: ${subcode}`);
+                    
+                    // 更新错误状态（但不自动重置）
+                    robotInfoManager.errorStatus.mainCode = maincode;
+                    robotInfoManager.errorStatus.subCode = subcode;
+                    robotInfoManager.errorStatus.lastCheckTime = new Date();
+                    
+                    if (maincode !== 0 || subcode !== 0) {
+                        robotInfoManager.updateErrorStatusUI(false, `检测到错误`);
+                        console.warn(`定期检查发现错误 - 主码: ${maincode}, 子码: ${subcode}`);
+                    } else {
+                        robotInfoManager.updateErrorStatusUI(true, "无错误");
+                        console.log('定期检查 - 机器人状态正常');
+                    }
+                } else {
+                    const errorMsg = errorResult?.error || "未知错误";
+                    console.warn('定期检查：获取错误代码失败', errorMsg);
+                    robotInfoManager.updateErrorStatusUI(false, `检查失败: ${errorMsg}`);
+                }
+            } catch (error) {
+                console.warn('定期检查错误代码时发生异常:', error);
+                robotInfoManager.updateErrorStatusUI(false, `检查异常: ${error.message}`);
+            }
+        }, 30000);
     </script>
 </body>
 </html>
