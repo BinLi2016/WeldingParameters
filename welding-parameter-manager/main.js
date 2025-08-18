@@ -12,13 +12,12 @@ function createWindow() {
       nodeIntegration: true,
       contextIsolation: false
     },
-    icon: path.join(__dirname, 'welding-machine.png'), // Custom welding machine icon
+    icon: path.join(__dirname, 'welding-machine.png'),
     title: '焊接参数管理器'
   });
 
   mainWindow.loadFile('index.html');
 
-  // Open DevTools in development
   if (process.argv.includes('--dev')) {
     mainWindow.webContents.openDevTools();
   }
@@ -38,27 +37,18 @@ app.on('activate', () => {
   }
 });
 
-// Get the config path from the executable's directory
 function getDefaultConfigPath() {
-  // In production, use the executable's directory
-  // In development, use the current directory
   if (app.isPackaged) {
-    // Get the directory where the exe is located
     const exePath = process.execPath;
     const exeDir = path.dirname(exePath);
     return path.join(exeDir, 'welding_config.json');
   } else {
-    // Development mode - use current directory
     return path.join(__dirname, 'welding_config.json');
   }
 }
 
-// IPC handlers for file operations
-// Config file is loaded from and saved to the same directory as the executable
-// This makes the app portable - users can run it from any folder with their config
 ipcMain.handle('load-config', async () => {
   try {
-    // Always load from default config path
     const defaultConfigPath = getDefaultConfigPath();
     const data = fs.readFileSync(defaultConfigPath, 'utf8');
     return JSON.parse(data);
@@ -70,9 +60,7 @@ ipcMain.handle('load-config', async () => {
 
 ipcMain.handle('save-config', async (event, config) => {
   try {
-    // Always save to default config path
     const defaultConfigPath = getDefaultConfigPath();
-    
     fs.writeFileSync(defaultConfigPath, JSON.stringify(config, null, 4), 'utf8');
     return { success: true };
   } catch (error) {
